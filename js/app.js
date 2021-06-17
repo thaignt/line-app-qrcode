@@ -2697,7 +2697,7 @@ module.exports = (function () {
 		events: {
 			"click @ui.logoutBtn" : "execLogout",
 			"click @ui.updateUserBtn" : "openUpadateUserWindow",
-			"click @ui.openWindowQrcode" : function(){ App.util.text.openWindow('https://thaignt.github.io/line-app-qrcode/#qrcode', true) },
+			"click @ui.openWindowQrcode" : function(){ App.util.text.openWindow('https://sgpweb.betrend.com/app/line-mini//#qrcode', true) },
 		},
 		initialize: function(){
 			if (AppConf.features.wallet){

@@ -4,6 +4,10 @@
 // 雛形アプリ上では、実行時にwindow.AppConfが定義されているかどうかをチェックすること。
 window.AppConf = {};
 
+AppConf.liff = {
+	id: '1655970647-MNmneNVx'
+}
+
 AppConf.core = {
 	contentsVersion: "",                        // アプリ毎のコンテンツバージョンを設定します（リリース時のSVNリビジョン）
 	// applicationId: "hqw6n8rclbax8457",          // ApplicationId jrwxejxpy4c1yelo
