@@ -2691,11 +2691,13 @@ module.exports = (function () {
 		},
 		ui: {
 			"logoutBtn" : "#logout-btn",
-			"updateUserBtn" : "#update-user-btn"
+			"updateUserBtn" : "#update-user-btn",
+			"openWindowQrcode" : "#openWindowQrcode",
 		},
 		events: {
 			"click @ui.logoutBtn" : "execLogout",
-			"click @ui.updateUserBtn" : "openUpadateUserWindow"
+			"click @ui.updateUserBtn" : "openUpadateUserWindow",
+			"click @ui.openWindowQrcode" : function(){ App.util.text.openWindow('https://thaignt.github.io/line-app-qrcode/#qrcode', true) },
 		},
 		initialize: function(){
 			if (AppConf.features.wallet){
@@ -2769,7 +2771,7 @@ module.exports = (function () {
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div id="CONFIG-TOP" class="BACKBONE-PAGE">\r\n\r\n<div class="bgcolor3 ftcolor1">\r\n\t<ul>\r\n\t\t<li class="bdcolor1"><a href="#qrcode">QRcode</a></li>\r\n\t\t';
+__p+='<div id="CONFIG-TOP" class="BACKBONE-PAGE">\r\n\r\n<div class="bgcolor3 ftcolor1">\r\n\t<ul>\r\n\t\t<li class="bdcolor1" id="openWindowQrcode"><a>TEST QRcode</a></li>\r\n\t\t<!-- <li class="bdcolor1"><a href="#qrcode">QRcode</a></li> -->\r\n\t\t';
  if( App.appModel.getAuthInfo().token !== "" ){ 
 __p+='\r\n\t\t\t<li class="bdcolor1" id="update-user-btn"><a >会員情報変更</a></li>\r\n\t\t';
  } 
@@ -11599,11 +11601,12 @@ module.exports = (function () {
         },
         success: function (res) {
             this.successCallback(res || "");
-            this.cancel()
+            this.cancel();
         },
         cancel: function () {
             this.successCallback = null;
             this.$el.removeClass('modal--show');
+            liff.closeWindow();
             if (this.html5QrCode) {
                 this.html5QrCode.stop().then(function (ignore) {
                     // QR Code scanning is stopped.
