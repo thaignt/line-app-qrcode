@@ -1,0 +1,84 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+        content="width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Sample</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wrap-qrcode {
+            height: 100%;
+            position: relative;
+            background-color: #000;
+        }
+        .group-btns{
+            position: absolute;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+        }
+        .btn {
+            margin-top: 20px;
+            width: 100%;
+            height: 50px;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+        }
+    </style>
+
+<body>
+    <div class="wrap-qrcode">
+        <div id="qrcode-reader" width="300px"></div>
+        <div class="group-btns">
+            <button onclick="start()" class="btn btn-start">Start</button>
+            <button onclick="stop()" class="btn btn-stop">Stop</button>
+        </div>
+    </div>
+</body>
+<script src="./js/html5-qrcode.min.js"></script>
+<script>
+    var html5QrCode = new Html5Qrcode("qrcode-reader");
+
+    function start() {
+        var qrCodeSuccessCallback = (decodedText, decodedResult) => {
+            /* handle success */
+            stop();
+        };
+        var config = { fps: 10, qrbox: 250 };
+
+        // If you want to prefer front camera
+        html5QrCode.start({ facingMode: "user" }, config, qrCodeSuccessCallback);
+    }
+
+    function stop() {
+        html5QrCode.stop().then(function (ignore) {
+            // QR Code scanning is stopped.
+            console.log('stop')
+        }).catch(function (err) {
+            // Stop failed, handle it.
+        });
+    }
+
+</script>
+</head>
+
+</html>
