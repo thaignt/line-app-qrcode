@@ -94,9 +94,9 @@
                 console.log(decodedText, decodedResult);
                 var redirectUri = 'https://thaignt.github.io/line-app-qrcode/web/#config';
                 _this.stop();
-                
+
                 liff.login({ redirectUri: redirectUri });
-                liff.closeWindow();
+                // liff.closeWindow();
             };
             var config = { fps: 10, qrbox: 250 };
 
