@@ -433,6 +433,10 @@ AppConf.urlModifier = {
 	],
 };
 
+// AppConf.liff = {
+// 	id: '1655970647-MNmneNVx'
+// }
+
 AppConf.liff = {
-	id: '1655970647-MNmneNVx'
+	id: '1656109781-2xl7Qvry'
 }
