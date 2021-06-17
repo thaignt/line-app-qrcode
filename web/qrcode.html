@@ -92,11 +92,9 @@
             var qrCodeSuccessCallback = function (decodedText, decodedResult) {
                 /* handle success */
                 console.log(decodedText, decodedResult);
-                var redirectUri = 'https://thaignt.github.io/line-app-qrcode/web/#config';
+                location.href = 'https://liff.line.me/1656109781-2xl7Qvry/#config';
                 _this.stop();
-
-                liff.login({ redirectUri: redirectUri });
-                // liff.closeWindow();
+                liff.closeWindow();
             };
             var config = { fps: 10, qrbox: 250 };
 
