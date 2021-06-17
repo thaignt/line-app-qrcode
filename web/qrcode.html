@@ -24,7 +24,8 @@
             position: relative;
             background-color: #000;
         }
-        .group-btns{
+
+        .group-btns {
             position: absolute;
             width: 100%;
             max-width: 300px;
@@ -33,6 +34,7 @@
             right: 0;
             bottom: 40px;
         }
+
         .btn {
             margin-top: 20px;
             width: 100%;
@@ -49,33 +51,66 @@
     <div class="wrap-qrcode">
         <div id="qrcode-reader" width="300px"></div>
         <div class="group-btns">
-            <button onclick="start()" class="btn btn-start">Start</button>
-            <button onclick="stop()" class="btn btn-stop">Stop</button>
+            <button id="btnStart" class="btn btn-start">Start</button>
+            <button id="btnStop" class="btn btn-stop">Stop</button>
         </div>
     </div>
 </body>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 <script src="./js/html5-qrcode.min.js"></script>
 <script>
-    var html5QrCode = new Html5Qrcode("qrcode-reader");
+    window.onload = initializeLiff;
 
-    function start() {
-        var qrCodeSuccessCallback = (decodedText, decodedResult) => {
-            /* handle success */
-            stop();
-        };
-        var config = { fps: 10, qrbox: 250 };
-
-        // If you want to prefer front camera
-        html5QrCode.start({ facingMode: "user" }, config, qrCodeSuccessCallback);
+    function initializeLiff() {
+        liff
+            .init({
+                liffId: "1656109781-2xl7Qvry"
+            })
+            .then(() => {
+                startApp.init();
+            })
+            .catch((err) => {
+                // Error happens during initialization
+                console.log(err.code, err.message);
+            });
     }
 
-    function stop() {
-        html5QrCode.stop().then(function (ignore) {
-            // QR Code scanning is stopped.
-            console.log('stop')
-        }).catch(function (err) {
-            // Stop failed, handle it.
-        });
+    var startApp = {
+        init: function () {
+            var _this = this;
+            this.html5QrCode = new Html5Qrcode("qrcode-reader");
+
+            document.getElementById('btnStart').addEventListener("click", function(){
+                _this.start();
+            }, false);
+            document.getElementById('btnStop').addEventListener("click", function(){
+                _this.stop();
+            }, false);
+        },
+        start: function () {
+            var _this = this;
+            var qrCodeSuccessCallback = function (decodedText, decodedResult) {
+                /* handle success */
+                console.log(decodedText, decodedResult);
+                var redirectUri = 'https://thaignt.github.io/line-app-qrcode/web/#config';
+                _this.stop();
+                
+                liff.login({ redirectUri: redirectUri });
+                liff.closeWindow();
+            };
+            var config = { fps: 10, qrbox: 250 };
+
+            // If you want to prefer back camera
+            this.html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
+        },
+        stop: function () {
+            this.html5QrCode.stop().then(function (ignore) {
+                // QR Code scanning is stopped.
+                console.log('stop')
+            }).catch(function (err) {
+                // Stop failed, handle it.
+            });
+        }
     }
 
 </script>
