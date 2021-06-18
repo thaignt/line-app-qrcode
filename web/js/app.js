@@ -7117,7 +7117,9 @@ return __p;
 var PointModel = require('../../models/point_model.js');
 var CouponCollection = require('../../models/coupon_master_collection.js');
 var AvailableCouponCollectionView = require('./available_coupon_collection_view.js');
+var ModalAlertView = require('../../modals/alert/modal_alert_view');
 var Backbone = require('backbone');
+
 module.exports = (function () {
 
 	var PointMainLayout = Backbone.Marionette.LayoutView.extend({
@@ -7126,7 +7128,15 @@ module.exports = (function () {
 		regions: {
 			"availableCouponRegion": "#available-coupon-region"
 		},
-		initialize: function(){
+		ui: {
+			"btnQrcode": ".js-btnQrcode"
+		},
+		events:{
+			"click @ui.btnQrcode" : function(){ App.util.text.openWindow(AppConf.qrcode.url, true) },
+		},
+		initialize: function(options){
+			this.barcode = options.barcode || '';
+			this.modalAlertView = new ModalAlertView();
 			this.couponCollection = new CouponCollection();
 			this.pointModel = new PointModel();
 
@@ -7148,19 +7158,55 @@ module.exports = (function () {
 			}));
 		},
 		_renderPoint: function(){
+			var _this = this;
 			var point = App.util.text.numberWithDelimiter( this.pointModel.get("point") );
 			this.$('.point-text').html( point );
+
+			if(this.barcode){
+				// APIをコールして端末認証を行う
+				App.btApi.getQRCode({ code: this.barcode }).done(function (data) {
+					App.util.hideProgressScreen();
+					var msg = "来店ポイントを獲得しました";
+					_this.modalAlertView.show({ title: '', text: msg }).then(function (res) {
+						// _this.pointModel.fetchWithAuthInfo();
+						// location.hash = '#point'
+					});
+				}).fail(function (err) {
+					App.util.hideProgressScreen();
+					// NG
+					var msg = "来店ポイントの獲得に失敗しました（ステータス:  " + err.status + "）";
+					if (err.responseJSON) {
+						switch (err.responseJSON.errorCode) {
+							case "0002":
+								msg = "不正なQRコードです。正しいQRコードを読み込んでください";
+								break;
+							case "0008":
+								msg = "既に来店ポイントを獲得済みです";
+								break;
+							case "0007":
+								msg = "本日分は取得済みです";
+								break;
+							default:
+								msg = "来店ポイントの獲得に失敗しました（ステータス:  " + err.status + "、エラーコード:  " + err.responseJSON.errorCode + "）";
+								break;
+						}
+					}
+					_this.modalAlertView.show({ title: '', text: msg });
+					return;
+				});
+			}
+			
 		}
 	});
 
 	return PointMainLayout;
 })();
 
-},{"../../models/coupon_master_collection.js":209,"../../models/point_model.js":218,"./available_coupon_collection_view.js":95,"./point_main_template.html":104,"backbone":"5kFNoY"}],104:[function(require,module,exports){
+},{"../../modals/alert/modal_alert_view":190,"../../models/coupon_master_collection.js":209,"../../models/point_model.js":218,"./available_coupon_collection_view.js":95,"./point_main_template.html":104,"backbone":"5kFNoY"}],104:[function(require,module,exports){
 module.exports = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
-__p+='<div id="POINT-MAIN" class="BACKBONE-PAGE">\r\n\r\n\t<div class="current_point">\r\n\t\t<span class="point-title">現在のポイント数</span>\r\n\t\t<span class="point-text">0</span>\r\n\t\t<span class="point-unit">pt</span>\r\n\t</div>\r\n\t<div class="point_status">\r\n\t\t<div class="condition">\r\n\t\t\t<div class="condition_title ftcolor1">利用条件</div>\r\n\t\t\t<div class="condition_words ftcolor3">特典内容は、予告なく変更される場合があります。\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div id="available-coupon-region" class="bgcolor1 ftcolor1">\r\n\t</div>\r\n</div>\r\n'+
+__p+='<div id="POINT-MAIN" class="BACKBONE-PAGE">\r\n\r\n\t<div class="current_point">\r\n\t\t<span class="point-title">現在のポイント数</span>\r\n\t\t<span class="point-text">0</span>\r\n\t\t<span class="point-unit">pt</span>\r\n\t</div>\r\n\t<center><button class="btn-qrcode js-btnQrcode">Scan Qrcode</button></center>\r\n\t<div class="point_status">\r\n\t\t<div class="condition">\r\n\t\t\t<div class="condition_title ftcolor1">利用条件</div>\r\n\t\t\t<div class="condition_words ftcolor3">特典内容は、予告なく変更される場合があります。\r\n\t\t\t</div>\r\n\t\t</div>\r\n\t</div>\r\n\t<div id="available-coupon-region" class="bgcolor1 ftcolor1">\r\n\t</div>\r\n</div>\r\n'+
 ((__t=( App.util.injectProgressScreenDom()  ))==null?'':__t)+
 '\r\n';
 }
@@ -7169,13 +7215,17 @@ return __p;
 
 },{}],105:[function(require,module,exports){
 var Backbone = require('backbone');
+var querystring = require('querystring');
 var PointMainLayout = require("./point_main_layout.js");
 var ExchangeCouponLayout = require("./exchange_coupon_layout.js");
 module.exports = (function () {
 
 	var PointController = Backbone.Marionette.Controller.extend({
-		showPointMainView: function(){
-			var pointMainLayout = new PointMainLayout();
+		showPointMainView: function(query){
+			var _query = query || {};
+			var options = querystring.parse(_query);
+
+			var pointMainLayout = new PointMainLayout( options );
 			pointMainLayout.render();
 			App.pageSlider.slidePage( pointMainLayout );
 			App.headerModel.applyViewHeaderConf( pointMainLayout.headerConf );
@@ -7194,6 +7244,7 @@ module.exports = (function () {
 		controller: pointController,
 		appRoutes: {
 			"point" : "showPointMainView",
+			"point/:id" : "showPointMainView",
 			"point/exchange_coupon/:id" : "showExchangeCoupon",
 		}
 	});
@@ -7202,7 +7253,7 @@ module.exports = (function () {
 
 })();
 
-},{"./exchange_coupon_layout.js":98,"./point_main_layout.js":103,"backbone":"5kFNoY"}],106:[function(require,module,exports){
+},{"./exchange_coupon_layout.js":98,"./point_main_layout.js":103,"backbone":"5kFNoY","querystring":"SZ5xis"}],106:[function(require,module,exports){
 var Backbone = require('backbone');
 
 module.exports = (function () {
