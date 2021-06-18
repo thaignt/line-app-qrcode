@@ -7244,7 +7244,7 @@ module.exports = (function () {
 		controller: pointController,
 		appRoutes: {
 			"point" : "showPointMainView",
-			"point/:id" : "showPointMainView",
+			"point/(?:query)" : "showPointMainView",
 			"point/exchange_coupon/:id" : "showExchangeCoupon",
 		}
 	});
