@@ -55,63 +55,65 @@
             <button id="btnStop" class="btn btn-stop">Stop</button>
         </div>
     </div>
-</body>
-<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-<script src="./js/html5-qrcode.min.js"></script>
-<script>
-    window.onload = initializeLiff;
 
-    function initializeLiff() {
-        liff
-            .init({
-                liffId: "1656109781-2xl7Qvry"
-            })
-            .then(() => {
-                startApp.init();
-            })
-            .catch((err) => {
-                // Error happens during initialization
-                console.log(err.code, err.message);
-            });
-    }
+    <script type="text/javascript" charset="utf-8" src="./js/app_config.js"></script>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="./js/html5-qrcode.min.js"></script>
+    <script>
+        window.onload = initializeLiff;
 
-    var startApp = {
-        init: function () {
-            var _this = this;
-            this.html5QrCode = new Html5Qrcode("qrcode-reader");
-
-            document.getElementById('btnStart').addEventListener("click", function(){
-                _this.start();
-            }, false);
-            document.getElementById('btnStop').addEventListener("click", function(){
-                _this.stop();
-            }, false);
-        },
-        start: function () {
-            var _this = this;
-            var qrCodeSuccessCallback = function (decodedText, decodedResult) {
-                /* handle success */
-                console.log(decodedText, decodedResult);
-                location.href = 'https://liff.line.me/1656109781-2xl7Qvry/#config';
-                _this.stop();
-                liff.closeWindow();
-            };
-            var config = { fps: 10, qrbox: 250 };
-
-            // If you want to prefer back camera
-            this.html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
-        },
-        stop: function () {
-            this.html5QrCode.stop().then(function (ignore) {
-                // QR Code scanning is stopped.
-                console.log('stop')
-            }).catch(function (err) {
-                // Stop failed, handle it.
-            });
+        function initializeLiff() {
+            liff
+                .init({
+                    liffId: "1656109781-2xl7Qvry"
+                })
+                .then(() => {
+                    startApp.init();
+                })
+                .catch((err) => {
+                    // Error happens during initialization
+                    console.log(err.code, err.message);
+                });
         }
-    }
 
-</script>
-</head>
+        var startApp = {
+            init: function () {
+                var _this = this;
+                this.html5QrCode = new Html5Qrcode("qrcode-reader");
+
+                document.getElementById('btnStart').addEventListener("click", function () {
+                    _this.start();
+                }, false);
+                document.getElementById('btnStop').addEventListener("click", function () {
+                    _this.stop();
+                }, false);
+            },
+            start: function () {
+                var _this = this;
+                var qrCodeSuccessCallback = function (decodedText, decodedResult) {
+                    /* handle success */
+                    console.log(decodedText, decodedResult);
+                    location.href = 'https://liff.line.me/' + AppConf.liff.id + '/#config';
+                    _this.stop();
+                    liff.closeWindow();
+                };
+                var config = { fps: 10, qrbox: 250 };
+
+                // If you want to prefer back camera
+                this.html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
+            },
+            stop: function () {
+                this.html5QrCode.stop().then(function (ignore) {
+                    // QR Code scanning is stopped.
+                    console.log('stop')
+                }).catch(function (err) {
+                    // Stop failed, handle it.
+                });
+            }
+        }
+
+    </script>
+
+</body>
 
 </html>

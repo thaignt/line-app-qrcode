@@ -1365,6 +1365,15 @@ body {
 
 #POINT-MAIN .point_status, #MEMBER-DETAIL .point_status, #STAMP-TOP .point_status, #INFO-SOUND .point_status {
   padding: 10px 15px; }
+#POINT-MAIN .btn-qrcode, #MEMBER-DETAIL .btn-qrcode, #STAMP-TOP .btn-qrcode, #INFO-SOUND .btn-qrcode {
+  width: 250px;
+  height: 40px;
+  color: #fff;
+  background-color: #000;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 25px 0; }
 #POINT-MAIN .current_point, #MEMBER-DETAIL .current_point, #STAMP-TOP .current_point, #INFO-SOUND .current_point {
   position: relative;
   padding: 17px 0;

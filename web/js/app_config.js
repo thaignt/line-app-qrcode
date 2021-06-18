@@ -440,3 +440,7 @@ AppConf.urlModifier = {
 AppConf.liff = {
 	id: '1656109781-2xl7Qvry'
 }
+
+AppConf.qrcode = {
+	url: 'https://thaignt.github.io/line-app-qrcode/web/qrcode.html'
+}
