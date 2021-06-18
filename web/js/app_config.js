@@ -442,5 +442,5 @@ AppConf.liff = {
 }
 
 AppConf.qrcode = {
-	url: 'https://thaignt.github.io/zkjshljlshdlihsfhdnsfk/web/qrcode.html'
+	url: 'https://thaignt.github.io/line-app-qrcode/web/qrcode.html'
 }
