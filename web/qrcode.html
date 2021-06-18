@@ -93,7 +93,7 @@
                 var qrCodeSuccessCallback = function (decodedText, decodedResult) {
                     /* handle success */
                     console.log(decodedText, decodedResult);
-                    location.href = 'https://liff.line.me/' + AppConf.liff.id + '/#config';
+                    location.href = 'https://liff.line.me/' + AppConf.liff.id + '/#point?barcode=' + decodedText;
                     _this.stop();
                     liff.closeWindow();
                 };
