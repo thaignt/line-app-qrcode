@@ -7168,9 +7168,10 @@ module.exports = (function () {
 					App.util.hideProgressScreen();
 					var msg = "来店ポイントを獲得しました";
 					_this.modalAlertView.show({ title: '', text: msg }).then(function (res) {
-						// _this.pointModel.fetchWithAuthInfo();
-						// location.hash = '#point'
+						_this.barcode = null;
+						_this.pointModel.fetchWithAuthInfo();
 					});
+					
 				}).fail(function (err) {
 					App.util.hideProgressScreen();
 					// NG
