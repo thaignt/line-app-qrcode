@@ -1,0 +1,126 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+        content="width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>Sample</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        .wrap-qrcode {
+            height: 100%;
+            position: relative;
+            background-color: #000;
+        }
+
+        .group-btns {
+            position: absolute;
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            width: 100%;
+            height: 50px;
+            border-radius: 8px;
+            background-color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+        }
+    </style>
+
+<body>
+    <div class="wrap-qrcode">
+        <div id="qrcode-reader" width="300px"></div>
+        <div class="group-btns">
+            <button id="btnStart" class="btn btn-start">Start</button>
+            <button id="btnStop" class="btn btn-stop">Stop</button>
+        </div>
+    </div>
+
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="https://blog.minhazav.dev/assets/research/html5qrcode/html5-qrcode.min.js"></script>
+    <script>
+        var url, params, liffId, hash, security; 
+        window.onload = initializeLiff;
+
+        function initializeLiff() {
+            url = new URL(location.href);
+            params = url.searchParams;
+            console.log(location.search)
+            liffId = params.get('liffId');
+            hash = params.get('hash');
+            security = params.get('security');
+            
+            liff
+                .init({
+                    liffId: liffId
+                })
+                .then(() => {
+                    startApp.init();
+                })
+                .catch((err) => {
+                    // Error happens during initialization
+                    console.log(err.code, err.message);
+                });
+        }
+
+        var startApp = {
+            init: function () {
+                var _this = this;
+                this.html5QrCode = new Html5Qrcode("qrcode-reader");
+
+                document.getElementById('btnStart').addEventListener("click", function () {
+                    _this.start();
+                }, false);
+                document.getElementById('btnStop').addEventListener("click", function () {
+                    _this.stop();
+                }, false);
+            },
+            start: function () {
+                var _this = this;
+                var qrCodeSuccessCallback = function (decodedText, decodedResult) {
+                    /* handle success */
+                    console.log(decodedText, decodedResult);
+                    location.href = `https://liff.line.me/${liffId}/#${hash}?security=${security}&barcode=${decodedText}`;
+                    liff.closeWindow();
+                };
+                var config = { fps: 10, qrbox: 250 };
+
+                // If you want to prefer back camera
+                this.html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
+            },
+            stop: function () {
+                this.html5QrCode.stop().then(function (ignore) {
+                    // QR Code scanning is stopped.
+                    location.href = `https://liff.line.me/${liffId}/#${hash}`;
+                    liff.closeWindow();
+                }).catch(function (err) {
+                    // Stop failed, handle it.
+                });
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
