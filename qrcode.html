@@ -65,10 +65,8 @@
         function initializeLiff() {
             url = new URL(location.href);
             params = url.searchParams;
-            console.log(location.search)
             liffId = params.get('liffId');
             hash = params.get('hash');
-            hash = 'config';
             security = params.get('security');
             
             liff
@@ -102,7 +100,7 @@
                     /* handle success */
                     console.log(decodedText, decodedResult);
                     window.location.href = `line://liff.line.me/${liffId}#${hash}?security=${security}&barcode=${decodedText}`;
-                    // liff.closeWindow();
+                    _this.close();
                 };
                 var config = { fps: 10, qrbox: 250 };
 
@@ -110,13 +108,19 @@
                 this.html5QrCode.start({ facingMode: "environment" }, config, qrCodeSuccessCallback);
             },
             stop: function () {
+                var _this = this;
                 this.html5QrCode.stop().then(function (ignore) {
                     // QR Code scanning is stopped.
                     window.location.href = `line://liff.line.me/${liffId}#${hash}`;
-                    // liff.closeWindow();
+                    _this.close();
                 }).catch(function (err) {
                     // Stop failed, handle it.
                 });
+            },
+            close: function(){
+                setTimeout(function(){
+                    liff.closeWindow();
+                }, 60*1000);
             }
         }
 
