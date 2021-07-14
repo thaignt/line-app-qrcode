@@ -100,7 +100,9 @@
                 var qrCodeSuccessCallback = function (decodedText, decodedResult) {
                     /* handle success */
                     console.log(decodedText, decodedResult);
-                    location.href = `https://liff.line.me/${liffId}/#${hash}?security=${security}&barcode=${decodedText}`;
+                    var url = `https://liff.line.me/${liffId}/#${hash}?security=${security}&barcode=${decodedText}`;
+                    alert(url)
+                    location.href = url;
                     liff.closeWindow();
                 };
                 var config = { fps: 10, qrbox: 250 };
