@@ -101,11 +101,9 @@
                     /* handle success */
                     console.log(decodedText, decodedResult);
                     var lineApp = `itms-apps://liff.line.me/${liffId}/#${hash}?security=${security}&barcode=${decodedText}`;
-                    liff.openWindow({
-                        url: lineApp,
-                        external: false
-                    });
-                    liff.closeWindow();
+                    alert(lineApp);
+                    window.location.href = lineApp;
+                    // liff.closeWindow();
                 };
                 var config = { fps: 10, qrbox: 250 };
 
