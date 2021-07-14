@@ -102,7 +102,7 @@
                     /* handle success */
                     console.log(decodedText, decodedResult);
                     window.location.href = `line://liff.line.me/${liffId}/#${hash}?security=${security}&barcode=${decodedText}`;
-                    liff.closeWindow();
+                    // liff.closeWindow();
                 };
                 var config = { fps: 10, qrbox: 250 };
 
@@ -113,7 +113,7 @@
                 this.html5QrCode.stop().then(function (ignore) {
                     // QR Code scanning is stopped.
                     window.location.href = `line://liff.line.me/${liffId}/#${hash}`;
-                    liff.closeWindow();
+                    // liff.closeWindow();
                 }).catch(function (err) {
                     // Stop failed, handle it.
                 });
