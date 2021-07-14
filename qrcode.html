@@ -100,7 +100,7 @@
                 var qrCodeSuccessCallback = function (decodedText, decodedResult) {
                     /* handle success */
                     console.log(decodedText, decodedResult);
-                    var lineApp = `https://liff.line.me/${liffId}/#${hash}?security=${security}&barcode=${decodedText}`;
+                    var lineApp = `itms-apps://liff.line.me/${liffId}/#${hash}?security=${security}&barcode=${decodedText}`;
                     liff.openWindow({
                         url: lineApp,
                         external: false
@@ -115,7 +115,7 @@
             stop: function () {
                 this.html5QrCode.stop().then(function (ignore) {
                     // QR Code scanning is stopped.
-                    location.href = `https://liff.line.me/${liffId}/#${hash}`;
+                    location.href = `itms-apps://liff.line.me/${liffId}/#${hash}`;
                     liff.closeWindow();
                 }).catch(function (err) {
                     // Stop failed, handle it.
