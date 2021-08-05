@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+        content="width=device-width, minimum-scale=1, maximum-scale=1, initial-scale=1.0, user-scalable=no">
+    <title>Sample</title>
+</head>
+
+<body id="HINAGATA">
+    <h1 id="result"></h1>
+    <button onclick="scanCode()">ScanCode</button>
+    <script charset="utf-8" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.9.1/sdk.js"></script>
+    <!-- <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.4.0/sdk.js"></script> -->
+    <script>
+        async function scanCode(){
+            const result = await liff.scanCode();
+            document.getElementById('result').innerHTML = result.value;
+        }
+        async function main(){
+            await liff.init({liffId: "1656109781-2xl7Qvry"});
+        }
+        main();
+    </script>
+</body>
+
+</html>
