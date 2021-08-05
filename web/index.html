@@ -10,17 +10,18 @@
 
 <body id="HINAGATA">
     <h1 id="result"></h1>
-    <button onclick="scanCode()">ScanCode</button>
+    <button onclick="javascript:location.href='https://line.me/R/nv/QRCodeReader'">ScanCode</button>
     <script charset="utf-8" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.9.1/sdk.js"></script>
     <!-- <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.4.0/sdk.js"></script> -->
     <script>
-        async function scanCode(){
-            const result = await liff.scanCode();
-            document.getElementById('result').innerHTML = result.value;
-        }
         async function main(){
             await liff.init({liffId: "1656109781-2xl7Qvry"});
+            const queryString = decodeURIComponent(window.location.search);
+            const params = new URLSearchParams(queryString);
+            if(params.get("param") !== null){
+                document.getElementById("result").innerHTML = params.get("param");
+            }
         }
         main();
     </script>
